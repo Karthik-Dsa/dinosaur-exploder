@@ -84,7 +84,9 @@ public class PlayerComponent extends Component implements Player {
   public void onAdded() {
     shootTimer.capture();
     // Load images once when component is added
-    shipImage = new Image(shipImagePath);
+    // Use resource stream for both images to ensure consistency
+    shipImage =
+        new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + shipImagePath)));
     projectileImage =
         new Image(Objects.requireNonNull(getClass().getResourceAsStream(weaponImagePath)));
   }
@@ -265,7 +267,7 @@ public class PlayerComponent extends Component implements Player {
     }
   }
 
-  // Getter for weapon heat for fron end feature
+  // Getter for weapon heat for front end feature
   public double getWeaponHeat() {
     return weaponHeat;
   }
