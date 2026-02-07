@@ -78,10 +78,7 @@ public class GameActions {
       // Added extra line of code to sync the lives counter after death
       // All hearts disappear after death
       life.getComponent(LifeComponent.class).onUpdate(lives);
-      System.out.println("Game Over!");
       gameOver();
-    } else {
-      System.out.printf("%d lives remaining ! ", lives);
     }
   }
 

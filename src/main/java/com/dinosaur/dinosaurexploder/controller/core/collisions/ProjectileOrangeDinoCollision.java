@@ -48,7 +48,9 @@ public class ProjectileOrangeDinoCollision implements CollisionHandlerInterface 
             // if the boss is defeated it drops 100% a heart
             spawn("heart", orangeDino.getX(), orangeDino.getY());
             // if the boss dino is defeated it drops twice as many coins as the current level
-            for (int i = 0; i < levelManager.getCurrentLevel() * 2; i++) {
+            // Capped at 15 coins to prevent performance issues at higher levels
+            int coinCount = Math.min(levelManager.getCurrentLevel() * 2, 15);
+            for (int i = 0; i < coinCount; i++) {
               spawn(
                   "coin", orangeDino.getX() + random(-25, 25), orangeDino.getY() + random(-25, 25));
             }
@@ -57,7 +59,6 @@ public class ProjectileOrangeDinoCollision implements CollisionHandlerInterface 
             collisionHandler.handleBossDefeat(score.getComponent(ScoreComponent.class));
 
             gameActions.showLevelMessage();
-            System.out.println("Level up!");
           } else {
             bossSpawner.updateHealthBar();
           }

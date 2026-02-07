@@ -46,7 +46,6 @@ public class ProjectileGreenDinoCollision implements CollisionHandlerInterface {
               score.getComponent(ScoreComponent.class),
               levelProgressBar.getComponent(LevelProgressBarComponent.class))) {
             gameActions.showLevelMessage();
-            System.out.println("Level up!");
           }
         });
   }

@@ -23,7 +23,6 @@ public class PlayerGreenDinoCollision implements CollisionHandlerInterface {
         (player, greenDino) -> {
           AudioManager.getInstance().playSound(GameConstants.PLAYER_HIT_SOUND);
           greenDino.removeFromWorld();
-          System.out.println("You touched a dino !");
           gameActions.damagePlayer();
         });
   }

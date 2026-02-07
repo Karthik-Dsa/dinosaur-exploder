@@ -34,7 +34,6 @@ public class PlayerCoinCollision implements CollisionHandlerInterface {
         (player, coin) -> {
           AudioManager.getInstance().playSound(GameConstants.COIN_GAIN);
           coin.removeFromWorld();
-          System.out.println("You touched a coin!");
           BombComponent bombComponent = null;
           if (bomb.hasComponent(BombComponent.class))
             bombComponent = bomb.getComponent(BombComponent.class);
