@@ -23,7 +23,6 @@ public class EnemyProjectilePlayerCollision implements CollisionHandlerInterface
         (projectile, player) -> {
           AudioManager.getInstance().playSound(GameConstants.PLAYER_HIT_SOUND);
           projectile.removeFromWorld();
-          System.out.println("You got hit !\n");
           gameActions.damagePlayer();
         });
   }

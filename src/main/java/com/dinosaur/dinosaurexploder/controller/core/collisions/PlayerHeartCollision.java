@@ -25,7 +25,6 @@ public class PlayerHeartCollision implements CollisionHandlerInterface {
         (player, heart) -> {
           AudioManager.getInstance().playSound(GameConstants.HEART_HIT_SOUND);
           heart.removeFromWorld();
-          System.out.println("You touched a heart!");
           life.getComponent(LifeComponent.class).increaseLife(1);
         });
   }

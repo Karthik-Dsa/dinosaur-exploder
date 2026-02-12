@@ -23,6 +23,8 @@ import com.dinosaur.dinosaurexploder.constants.GameConstants;
 import com.dinosaur.dinosaurexploder.utils.FXGLGameTimer;
 import com.dinosaur.dinosaurexploder.utils.LanguageManager;
 import com.dinosaur.dinosaurexploder.utils.LevelManager;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,15 +46,30 @@ import javafx.util.Duration;
 public class GameEntityFactory implements EntityFactory {
   private static final Logger logger = Logger.getLogger(GameEntityFactory.class.getName());
 
+  // Cache for image resources to avoid recreating them on every spawn
+  private static final Map<String, Image> imageCache = new HashMap<>();
+
+  /**
+   * Get or create an image from cache. This improves performance by avoiding repeated image
+   * loading.
+   */
+  private Image getCachedImage(String path) {
+    return imageCache.computeIfAbsent(
+        path,
+        p -> {
+          try {
+            return new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + p)));
+          } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to load image: " + p, e);
+            throw new RuntimeException("Failed to load image: " + p, e);
+          }
+        });
+  }
+
   /** Summary : New Background creation will be handled in below Entity */
   @Spawns("background")
   public Entity newBackground(SpawnData data) {
-    Image img =
-        new Image(
-            Objects.requireNonNull(
-                Objects.requireNonNull(
-                        getClass().getResource("/" + GameConstants.BACKGROUND_IMAGE_PATH))
-                    .toString()));
+    Image img = getCachedImage(GameConstants.BACKGROUND_IMAGE_PATH);
 
     return FXGL.entityBuilder()
         .view(new SelfScrollingBackgroundView(img, 3000, 1500, Orientation.VERTICAL, -50))
@@ -69,8 +86,7 @@ public class GameEntityFactory implements EntityFactory {
     logger.log(Level.INFO, "Spaceship selected in newPlayer: {0}", selectedShip);
 
     // Set Ship Image
-    Image shipImage =
-        new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + shipImagePath)));
+    Image shipImage = getCachedImage(shipImagePath);
 
     // Ship dimension
     double width = shipImage.getWidth();
@@ -94,8 +110,7 @@ public class GameEntityFactory implements EntityFactory {
     String weaponImagePath =
         "assets/textures/projectiles/projectile" + selectedShip + "_" + selectedWeapon + ".png";
 
-    Image projectileImage =
-        new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + weaponImagePath)));
+    Image projectileImage = getCachedImage(weaponImagePath);
     return entityBuilderBase(data, EntityType.PROJECTILE)
         // The OffscreenCleanComponent is used because when the projectiles move, if
         // they
